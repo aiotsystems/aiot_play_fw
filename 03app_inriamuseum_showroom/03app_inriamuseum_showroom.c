@@ -258,12 +258,16 @@ void _ntw_getTime_cb(dn_ipmt_getParameter_time_rpt* reply) {
                     num_asns_to_wait  = 0xff-app_vars.asn[4];
                     num_ticks_to_wait = num_asns_to_wait*TICKS_PER_SLOT;
                     app_vars.step     = STEP_4_MUSIC_ASN4;
+                    // clear COUNTER
+                    NRF_RTC0->TASKS_CLEAR          = 0x00000001;
                     NRF_RTC0->CC[0]   = num_ticks_to_wait;
                 }
                 break;
             case STEP_4_MUSIC_ASN4:
                 app_dbg.num_ntw_getTime_STEP_4_ASN4++;
                 app_vars.step         = STEP_2_US;
+                // clear COUNTER
+                NRF_RTC0->TASKS_CLEAR          = 0x00000001;
                 NRF_RTC0->CC[0]       = RTC0PERIOD_STEP_2_US;
                 trackIdx              = app_vars.moteId-2; // the first mote has moteId 2, yet we want trackIdx 0 for it
                 if(app_vars.f_play_star_wars){
